@@ -95,7 +95,8 @@ static NSString * __HTMLStartTagForElement(MMElement *anElement)
         case MMElementTypeBlockquote:
             return @"<blockquote>\n";
         case MMElementTypeCodeBlock:
-          return anElement.language ? [NSString stringWithFormat:@"<pre><code class=\"%@\">", anElement.language] : @"<pre><code>";
+            return anElement.language ? [NSString stringWithFormat:@"<div class=\"code-block\"><div class=\"code-header\">%@<button class=\"copy-button\" onclick=\"copyCode(this)\">Copy</button></div><pre><code class=\"%@\">", anElement.language, anElement.language] : @"<pre><code>";
+//          return anElement.language ? [NSString stringWithFormat:@"<pre><code class=\"%@\">", anElement.language] : @"<pre><code>";
         case MMElementTypeLineBreak:
             return @"<br />";
         case MMElementTypeHorizontalRule:
@@ -170,7 +171,8 @@ static NSString * __HTMLEndTagForElement(MMElement *anElement)
         case MMElementTypeBlockquote:
             return @"</blockquote>\n";
         case MMElementTypeCodeBlock:
-            return @"</code></pre>\n";
+//            return @"</code></pre>\n";
+            return @"</code></pre></div>\n";
         case MMElementTypeStrikethrough:
             return @"</del>";
         case MMElementTypeStrong:

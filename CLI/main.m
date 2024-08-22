@@ -33,9 +33,14 @@ int main(int argc, const char * argv[])
     @autoreleasepool
     {
         // Read the Markdown from STDIN
-        NSFileHandle *inHandle = [NSFileHandle fileHandleWithStandardInput];
-        NSData       *inData   = [inHandle readDataToEndOfFile];
-        NSString     *markdown = [[NSString alloc] initWithData:inData encoding:NSUTF8StringEncoding];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"md"];
+        NSString *markdown = [NSString stringWithContentsOfFile:path
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:nil];
+        
+//        NSFileHandle *inHandle = [NSFileHandle fileHandleWithStandardInput];
+//        NSData       *inData   = [inHandle readDataToEndOfFile];
+//        NSString     *markdown = [[NSString alloc] initWithData:inData encoding:NSUTF8StringEncoding];
         
         // Convert to HTML
         NSError  *error;
@@ -52,9 +57,28 @@ int main(int argc, const char * argv[])
         }
         
         // Write the HTML to STDOUT
-        NSFileHandle *outHandle = [NSFileHandle fileHandleWithStandardOutput];
-        NSData       *outData   = [HTML dataUsingEncoding:NSUTF8StringEncoding];
-        [outHandle writeData:outData];
+//        NSFileHandle *outHandle = [NSFileHandle fileHandleWithStandardOutput];
+//        NSData       *outData   = [HTML dataUsingEncoding:NSUTF8StringEncoding];
+//        [outHandle writeData:outData];
+        NSString *pathHead = [[NSBundle mainBundle] pathForResource:@"head" ofType:@"html"];
+        NSMutableString *strContent = [NSMutableString stringWithContentsOfFile:pathHead];
+        [strContent appendString:HTML];
+        
+//        [strContent replaceOccurrencesOfString:@"<pre><code"
+//                                    withString:@"<div class=\"code-block\"><pre><code"
+//                                       options:NSCaseInsensitiveSearch
+//                                         range:NSMakeRange(0, strContent.length)];
+//
+//        [strContent replaceOccurrencesOfString:@"</code></pre>"
+//                                    withString:@"</code></pre></div>"
+//                                       options:NSCaseInsensitiveSearch
+//                                         range:NSMakeRange(0, strContent.length)];
+        
+        NSString *outPath = @"/Users/infc/Downloads/test.html";
+        [strContent writeToFile:outPath
+               atomically:YES
+                 encoding:NSUTF8StringEncoding
+                    error:nil];
     }
     
     return EXIT_SUCCESS;
